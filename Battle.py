@@ -98,7 +98,7 @@ def game_play():
                 print('Come again soon!')
                 break
 
-            while auto_play == 'a':
+            while auto_play == 'a' or auto_play == 'y':
                 round_num += 1
 
                 print(f"Round {round_num}")
@@ -110,40 +110,44 @@ def game_play():
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
                         break
 
-                if len(player_two.all_cards) == 0:
+                elif len(player_two.all_cards) == 0:
                     print("Player Two out of cards! Game Over")
                     print("Player One Wins!")
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
                         break
 
                 # Check to see if a player has enough cards to play:
-                if len(player_one.all_cards) < 3:
+                elif len(player_one.all_cards) < 3:
                     print("Player One out of cards! Game Over")
                     print("Player Two Wins!")
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
                         break
 
-                if len(player_two.all_cards) < 3:
+                elif len(player_two.all_cards) < 3:
                     print("Player Two out of cards! Game Over")
                     print("Player One Wins!")
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
@@ -170,128 +174,11 @@ def game_play():
 
                         # No Longer at "war" , time for next round
                         at_war = False
-
-                    # Player Two Has higher Card
-                    elif player_one_cards[-1].value < player_two_cards[-1].value:
-
-                        # Player Two gets the cards
-                        player_two.add_cards(player_one_cards)
-                        player_two.add_cards(player_two_cards)
-
-                        # No Longer at "war" , time for next round
-                        at_war = False
-
-                    elif player_one_cards[-1].value == player_two_cards[-1].value:
-                        print('Battle!')
-                        # This occurs when the cards are equal.
-
-                        # Check to see if a player is out of cards:
-                        if len(player_one.all_cards) < 5:
-                            print("Player One unable to play war! Game Over at War")
-                            print("Player Two Wins! Player One Loses!")
-                            game_on = False
-                            if replay():
-                                game_play()
-                            else:
-                                print('Thanks for playing! Goodbye!')
-                                auto_play = 'd'
-                                break
-
-                        elif len(player_two.all_cards) < 5:
-                            print("Player Two unable to play war! Game Over at War")
-                            print("Player One Wins! Player One Loses!")
-                            game_on = False
-                            if replay():
-                                game_play()
-                            else:
-                                print('Thanks for playing! Goodbye!')
-                                auto_play = 'd'
-                                break
-
-                        # Otherwise, we're still at war, so we'll add the next cards
+                        if auto_play == 'a':
+                            continue
                         else:
-                            for num in range(5):
-                                player_one_cards.append(player_one.remove_one())
-                                player_two_cards.append(player_two.remove_one())
-                            print('Player 1 cards: 4 facedown + ' + str(player_one_cards[-1]))
-                            print('Player 2 cards: 4 facedown + ' + str(player_two_cards[-1]))
-
-            while auto_play == 'y':
-
-                round_num += 1
-
-                print(f"Round {round_num}")
-
-                # Check to see if a player is out of cards:
-                if len(player_one.all_cards) == 0:
-                    print("Player One out of cards! Game Over")
-                    print("Player Two Wins!")
-                    game_on = False
-                    if replay():
-                        game_play()
-                    else:
-                        print('Thanks for playing! Goodbye!')
-                        auto_play = 'd'
-                        break
-
-                if len(player_two.all_cards) == 0:
-                    print("Player Two out of cards! Game Over")
-                    print("Player One Wins!")
-                    game_on = False
-                    if replay():
-                        game_play()
-                    else:
-                        print('Thanks for playing! Goodbye!')
-                        auto_play = 'd'
-                        break
-
-                # Check to see if a player has enough cards to play:
-                if len(player_one.all_cards) < 3:
-                    print("Player One out of cards! Game Over")
-                    print("Player Two Wins!")
-                    game_on = False
-                    if replay():
-                        game_play()
-                    else:
-                        print('Thanks for playing! Goodbye!')
-                        auto_play = 'd'
-                        break
-
-                if len(player_two.all_cards) < 3:
-                    print("Player Two out of cards! Game Over")
-                    print("Player One Wins!")
-                    game_on = False
-                    if replay():
-                        game_play()
-                    else:
-                        print('Thanks for playing! Goodbye!')
-                        auto_play = 'd'
-                        break
-
-                # Otherwise, the game is still on!
-
-                #
-                player_one_cards = [player_one.remove_one(), player_one.remove_one(), player_one.remove_one()]
-                print('Player 1: 2 face down cards, ' + str(player_one_cards[-1]))
-
-                player_two_cards = [player_two.remove_one(), player_two.remove_one(), player_two.remove_one()]
-                print('Player 2: 2 face down cards, ' + str(player_two_cards[-1]))
-
-                at_war = True
-
-                while at_war:
-
-                    if player_one_cards[-1].value > player_two_cards[-1].value:
-
-                        # Player One gets the cards
-                        player_one.add_cards(player_one_cards)
-                        player_one.add_cards(player_two_cards)
-
-                        # No Longer at "war" , time for next round
-
-                        at_war = False
-                        auto_play = 'n'
-                        break
+                            auto_play = 'n'
+                            break
 
                     # Player Two Has higher Card
                     elif player_one_cards[-1].value < player_two_cards[-1].value:
@@ -302,8 +189,11 @@ def game_play():
 
                         # No Longer at "war" , time for next round
                         at_war = False
-                        auto_play = 'n'
-                        break
+                        if auto_play == 'a':
+                            continue
+                        else:
+                            auto_play = 'n'
+                            break
 
                     elif player_one_cards[-1].value == player_two_cards[-1].value:
                         print('Battle!')
