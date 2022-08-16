@@ -229,6 +229,7 @@ def game_play():
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
@@ -240,6 +241,7 @@ def game_play():
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
@@ -252,6 +254,7 @@ def game_play():
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
@@ -263,6 +266,7 @@ def game_play():
                     game_on = False
                     if replay():
                         game_play()
+                        break
                     else:
                         print('Thanks for playing! Goodbye!')
                         auto_play = 'd'
