@@ -339,8 +339,3 @@ def game_play():
                                 player_two_cards.append(player_two.remove_one())
                             print('Player 1 cards: 4 facedown + ' + str(player_one_cards[-1]))
                             print('Player 2 cards: 4 facedown + ' + str(player_two_cards[-1]))
-
-
-
-
-game_play()
