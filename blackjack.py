@@ -1,5 +1,5 @@
 import random
-
+# @review-note: See Battle.py Review-Notes before this file. Many shared notes.
 playing = True  # global value used in functions later on
 game_on = False
 
@@ -22,7 +22,7 @@ class Card:
     def __str__(self):
         return self.rank + ' of ' + self.suit
 
-
+# @review-note: Looks like someone is using Jupyter :D
 # In[3]:
 
 
@@ -93,6 +93,8 @@ class Chips:
                     self.total = int(input('Please enter the number of chips you would like to purchase: '))
                 except ValueError:
                     print('Sorry, a bet must be an integer!')
+                # @review-note: You can more the `break` statement to the try block since it will only be reached
+                #               if there is no exception.
                 else:
                     break
             if self.total <= 0:

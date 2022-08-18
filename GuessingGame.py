@@ -17,6 +17,7 @@ def new_num():
 
 
 def replay():
+    # @review-note: `my_num` and `guess_list` are undefined variables at a module level. No need to cast them there.
     global game_play, my_num, guess_list
     choice = input("Do you want to play again? Yes or No: ").upper()
     if choice[0] == 'Y':
@@ -31,6 +32,8 @@ game_play = True
 
 
 def gameplay():
+    # @review-note: The "player guesses a number" should be a sub function of `gameplay()` to have cleaner code.
+    #               Optionally this applies to the comparative side of this function as well.
     while True:
 
         global game_play, my_num, guess_list
