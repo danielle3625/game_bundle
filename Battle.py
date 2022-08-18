@@ -1,8 +1,14 @@
 import random
 
+# @review-note: This variable gets used as a global throughout the application.
+#               Usage of global variables is very frowned upon for multiple reasons.
+#               See: http://wiki.c2.com/?GlobalVariablesAreBad
 game_on = True
 
+# @review-note: Those look like constants. According to convention, constants should be named in UPPERCASE.
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
+# @review-note: `ranks` seems to be identical to `tuple(values.keys())`. If this can not be omitted, I suggest
+#               constructing `ranks` from `values.keys()` to prevent accidental errors.
 ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
 values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8,
           'Nine': 9, 'Ten': 10, 'Jack': 11, 'Queen': 12, 'King': 13, 'Ace': 14}
@@ -22,6 +28,8 @@ class Card:
 class Deck:
 
     def __init__(self):
+        # @review-note: A list comprehension could cut processing time and line numbers here.
+        #               For example: `self.all_cards = [Card(suit, rank) for suit in suits for rank in ranks]`
         self.all_cards = []
         for suit in suits:
             for rank in ranks:
@@ -44,6 +52,9 @@ class Player:
         return self.all_cards.pop(0)
 
     def add_cards(self, new_cards):
+        # @review-note: I think you were looking for `if isinstance(new_cards, list):` to check if
+        #               multiple cards have been dealt ? Alternately you could always add cards with lists and
+        #               not worry about the type.
         if type(new_cards) == type([]):
             self.all_cards.extend(new_cards)
         else:
@@ -55,7 +66,8 @@ class Player:
 
 def replay():
     global game_on
-
+    # @review-note: I think this is overly complicated. Suggestion:
+    #               `return game_on := input("Do you want to play again? Y or N: ").upper() == 'Y'`
     choice = input("Do you want to play again? Y or N: ").upper()
     if choice == 'Y':
         game_on = True
@@ -76,6 +88,11 @@ def game_play():
     new_deck = Deck()
     new_deck.shuffle()
 
+    # @review-note: I think you are dealing each player half of the deck here.
+    #               This could be the rare occasion where a while loop would be preferred over a for loop.
+    #               Dealing cards until the deck is empty.
+    # @review-note: If you don't need the iteration variable of a for loop, use `_` to annotate that.
+    #               See: https://www.datacamp.com/tutorial/role-underscore-python Section 2
     for x in range(int(len(new_deck.all_cards) / 2)):
         player_one.add_cards(new_deck.deal_one())
         player_two.add_cards(new_deck.deal_one())
@@ -86,8 +103,14 @@ def game_play():
 
     while game_on:
 
+        # @review-note: `if not game_on` does the same thing.
+        #               See: https://www.freecodecamp.org/news/truthy-and-falsy-values-in-python/
         if game_on == False:
             break
+
+        # @review-note: I just skimmed over the rest of the file. It gets very nested quickly, so I became slightly
+        #               confused. Usually nesting should be avoided if possible. Instead split your logic in smaller
+        #               methods and call them at the correct time. This increases maintainability and readability.
 
         # Otherwise, the game is still on!
         while auto_play not in ['a', 'y', 'd']:

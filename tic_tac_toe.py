@@ -1,5 +1,7 @@
 import os
 import random
+# @review-note: IPython is not part of the standard library. It should therefore either be specified in a requirements
+#               document, or be replaced if possible.
 from IPython.display import clear_output
 
 
@@ -8,6 +10,8 @@ def display_board(board):
     Print out updated board per last move - only show most recent board
     """
 
+    # @review-note: This is Windows specific and will not work on linux or MacOS.
+    #               Either check for OS before clearing or use ANSI escape characters (which are platform independent)
     os.system('cls')
     clear_output()
     print(board[7]+'|'+board[8]+'|'+board[9])
@@ -34,6 +38,9 @@ def player_input():
             print('Sorry, you must choose between X or O only!')
         else:
             break
+    # @review-note: Ternary conditionals can improve readability, for example:
+    #               `player2 = 'O' if player1.upper() == 'X' else 'X'`
+    #               Which does the same thing as the code below.
     if player1.upper() == 'X':
         player2 = 'O'
     else:
@@ -54,6 +61,8 @@ def win_check(board, mark):
     Checks to see if there are three marks in a row
     """
 
+    # @review-note: It works, but it looks really bad.
+    #               Maybe preprocess all winning combinations and then just check against them?
     #across top
     return ((board[7] == mark and board[8] == mark and board[9] == mark) or
     #across middle
@@ -156,6 +165,8 @@ def tictac_play_game():
 
         play_game = input('Are you ready to play? Enter Yes or No.')
 
+        # @review-note: This crashes if the user presses enter without typing anything,
+        #               since there will be no first element, raising an IndexError
         if play_game.lower()[0] == 'y':
             game_on = True
         else:
