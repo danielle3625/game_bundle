@@ -1,8 +1,23 @@
 import os
 import random
-# @review-note: IPython is not part of the standard library. It should therefore either be specified in a requirements
-#               document, or be replaced if possible.
-from IPython.display import clear_output
+
+
+def clearscreen():
+    """
+    Clear the console.
+    So you only see current board with updated moves
+    """
+    if os.name == "posix":
+        # Unix/Linux/MacOS/BSD/etc
+        os.system('clear')
+    elif os.name in ("nt", "dos", "ce"):
+        # DOS/Windows
+        os.system('cls')
+    else:
+        # Fallback for other operating systems.
+        # Print a simple divider
+        print('-----')
+        print('-----')
 
 
 def display_board(board):
@@ -10,17 +25,13 @@ def display_board(board):
     Print out updated board per last move - only show most recent board
     """
 
-    # @review-note: This is Windows specific and will not work on linux or MacOS.
-    #               Either check for OS before clearing or use ANSI escape characters (which are platform independent)
-    os.system('cls')
-    clear_output()
+    clearscreen()
     print(board[7]+'|'+board[8]+'|'+board[9])
     print('-|-|-')
     print(board[4]+'|'+board[5]+'|'+board[6])
     print('-|-|-')
     print(board[1]+'|'+board[2]+'|'+board[3])
     print('_____')
-
 
 
 def player_input():
@@ -34,13 +45,11 @@ def player_input():
     while player1.upper() not in ['X', 'O']:
         player1 = input('Player 1, Please choose X or O: ')
         
-        if player1 not in ['X', 'O']:
+        if player1.upper() not in ['X', 'O']:
             print('Sorry, you must choose between X or O only!')
         else:
             break
-    # @review-note: Ternary conditionals can improve readability, for example:
-    #               `player2 = 'O' if player1.upper() == 'X' else 'X'`
-    #               Which does the same thing as the code below.
+
     if player1.upper() == 'X':
         player2 = 'O'
     else:
@@ -61,9 +70,6 @@ def win_check(board, mark):
     Checks to see if there are three marks in a row
     """
 
-    # @review-note: It works, but it looks really bad.
-    #               Maybe preprocess all winning combinations and then just check against them?
-    #across top
     return ((board[7] == mark and board[8] == mark and board[9] == mark) or
     #across middle
     (board[4] == mark and board[5] == mark and board[6] == mark) or
@@ -163,10 +169,11 @@ def tictac_play_game():
         turn = choose_first()
         print("Let's Play! " + turn + "  will go first")
 
-        play_game = input('Are you ready to play? Enter Yes or No.')
+        play_game = 'initiate_the_while_loop_below'
 
-        # @review-note: This crashes if the user presses enter without typing anything,
-        #               since there will be no first element, raising an IndexError
+        while play_game.upper() not in ['N', 'Y']:
+            play_game = input('Are you ready to play? Enter Yes or No.')
+
         if play_game.lower()[0] == 'y':
             game_on = True
         else:
