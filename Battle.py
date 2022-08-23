@@ -1,17 +1,13 @@
 import random
 
-# @review-note: This variable gets used as a global throughout the application.
-#               Usage of global variables is very frowned upon for multiple reasons.
-#               See: http://wiki.c2.com/?GlobalVariablesAreBad
 game_on = True
 
-# @review-note: Those look like constants. According to convention, constants should be named in UPPERCASE.
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
-# @review-note: `ranks` seems to be identical to `tuple(values.keys())`. If this can not be omitted, I suggest
-#               constructing `ranks` from `values.keys()` to prevent accidental errors.
-ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+
 values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8,
           'Nine': 9, 'Ten': 10, 'Jack': 11, 'Queen': 12, 'King': 13, 'Ace': 14}
+
+ranks = values.keys()
 
 
 class Card:
@@ -28,12 +24,8 @@ class Card:
 class Deck:
 
     def __init__(self):
-        # @review-note: A list comprehension could cut processing time and line numbers here.
-        #               For example: `self.all_cards = [Card(suit, rank) for suit in suits for rank in ranks]`
-        self.all_cards = []
-        for suit in suits:
-            for rank in ranks:
-                self.all_cards.append(Card(suit, rank))
+
+        self.all_cards = [Card(suit, rank) for suit in suits for rank in ranks]
 
     def shuffle(self):
         random.shuffle(self.all_cards)
@@ -52,9 +44,8 @@ class Player:
         return self.all_cards.pop(0)
 
     def add_cards(self, new_cards):
-        # @review-note: I think you were looking for `if isinstance(new_cards, list):` to check if
-        #               multiple cards have been dealt ? Alternately you could always add cards with lists and
-        #               not worry about the type.
+
+        #check for type. append can only handle one card at a time, extend can handle > 1 only.
         if type(new_cards) == type([]):
             self.all_cards.extend(new_cards)
         else:
@@ -66,9 +57,12 @@ class Player:
 
 def replay():
     global game_on
-    # @review-note: I think this is overly complicated. Suggestion:
-    #               `return game_on := input("Do you want to play again? Y or N: ").upper() == 'Y'`
+
+    #Ask user input for if they want to play again
+    #Turn global variable off to end gameplay and return to menu screen
+
     choice = input("Do you want to play again? Y or N: ").upper()
+
     if choice == 'Y':
         game_on = True
         return True
@@ -88,11 +82,7 @@ def game_play():
     new_deck = Deck()
     new_deck.shuffle()
 
-    # @review-note: I think you are dealing each player half of the deck here.
-    #               This could be the rare occasion where a while loop would be preferred over a for loop.
-    #               Dealing cards until the deck is empty.
-    # @review-note: If you don't need the iteration variable of a for loop, use `_` to annotate that.
-    #               See: https://www.datacamp.com/tutorial/role-underscore-python Section 2
+    #Split the deck evening between two players
     for x in range(int(len(new_deck.all_cards) / 2)):
         player_one.add_cards(new_deck.deal_one())
         player_two.add_cards(new_deck.deal_one())
@@ -101,18 +91,22 @@ def game_play():
 
     auto_play = 'n'
 
+    # This global variable allows for multiple matches to be played within one session
+    # Turning game_on False is to allow for end of blackjack gameplay then return to game_launcher main menu
     while game_on:
 
-        # @review-note: `if not game_on` does the same thing.
-        #               See: https://www.freecodecamp.org/news/truthy-and-falsy-values-in-python/
-        if game_on == False:
+        if not game_on:
             break
 
-        # @review-note: I just skimmed over the rest of the file. It gets very nested quickly, so I became slightly
-        #               confused. Usually nesting should be avoided if possible. Instead split your logic in smaller
-        #               methods and call them at the correct time. This increases maintainability and readability.
 
         # Otherwise, the game is still on!
+        # Selecting variable 'y' is to account for scenario with two human players
+        # Selecting variable 'y' will allow for turn by turn one at a time
+        # Selecting variable 'a' will auto complete the game
+        # User may want to select variable 'a' to initiate auto-play during long games
+        # Selecting variable 'd' is allows user to prevent the while loop below from initiating
+        # Variable 'd' solves a bug I was having wherein error raised for additional cards being dealt from
+        #   an empty list after the user chose not to replay another round, but instead return to main menu
         while auto_play not in ['a', 'y', 'd']:
             auto_play = input('Press "y" to play next round only or press "a" to auto play:  ')
 
@@ -178,13 +172,16 @@ def game_play():
 
                 # Otherwise, the game is still on!
 
-                #
+                # Deal each player 3 cards
                 player_one_cards = [player_one.remove_one(), player_one.remove_one(), player_one.remove_one()]
                 print('Player 1: 2 face down cards, ' + str(player_one_cards[-1]))
 
                 player_two_cards = [player_two.remove_one(), player_two.remove_one(), player_two.remove_one()]
                 print('Player 2: 2 face down cards, ' + str(player_two_cards[-1]))
 
+                # At War defines when there are two cards on the table
+                # High card wins
+                # If values are equal, initiate Battle Sequence!
                 at_war = True
 
                 while at_war:
@@ -218,9 +215,11 @@ def game_play():
                             auto_play = 'n'
                             break
 
+                    # Battle occurs when the cards are equal. You may also refer to this as War
+
                     elif player_one_cards[-1].value == player_two_cards[-1].value:
                         print('Battle!')
-                        # This occurs when the cards are equal.
+
 
                         # Check to see if a player is out of cards:
                         if len(player_one.all_cards) < 5:
@@ -246,6 +245,10 @@ def game_play():
                                 break
 
                         # Otherwise, we're still at war, so we'll add the next cards
+                        # Start while at auto_play 'a' for auto or 'y' for manual
+                        # Check to see if one player has high card and wins all
+                        # If both players values are equal again, it's a Battle Inception!
+
                         else:
                             for num in range(5):
                                 player_one_cards.append(player_one.remove_one())
