@@ -1,13 +1,15 @@
 import random
-# @review-note: See Battle.py Review-Notes before this file. Many shared notes.
-playing = True  # global value used in functions later on
+
+playing = True
 game_on = False
 
 # Use tuples because they are immutable
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
-ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+
 values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8, 'Nine': 9, 'Ten': 10,
           'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
+
+ranks = values.keys()
 
 
 class Card:
@@ -32,10 +34,7 @@ class Deck:
     """
 
     def __init__(self):
-        self.all_cards = []
-        for suit in suits:
-            for rank in ranks:
-                self.all_cards.append(Card(suit, rank))
+        self.all_cards = [Card(suit, rank) for suit in suits for rank in ranks]
 
     def __str__(self):
         deck_contains = ''
@@ -91,12 +90,10 @@ class Chips:
             while True:
                 try:
                     self.total = int(input('Please enter the number of chips you would like to purchase: '))
+                    break
                 except ValueError:
                     print('Sorry, a bet must be an integer!')
-                # @review-note: You can more the `break` statement to the try block since it will only be reached
-                #               if there is no exception.
-                else:
-                    break
+
             if self.total <= 0:
                 print('Sorry, you cannot purchase with negative money, madman! Please enter a positive integer: ')
                 continue
@@ -219,8 +216,8 @@ def blackjack_play_game():
 
     main_loop = True
     while main_loop:
-        # Set up the Player's chips outside while loop so that we can have multiple games
 
+        # Set up the Player's chips outside while loop so that we can have multiple games and keep chip balance
         player_chips = 0
 
         try:
