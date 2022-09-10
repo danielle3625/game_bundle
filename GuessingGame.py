@@ -17,8 +17,7 @@ def new_num():
 
 
 def replay():
-    # @review-note: `my_num` and `guess_list` are undefined variables at a module level. No need to cast them there.
-    global game_play, my_num, guess_list
+    global my_num, guess_list
     choice = input("Do you want to play again? Yes or No: ").upper()
     if choice[0] == 'Y':
         my_num = new_num()
@@ -28,12 +27,24 @@ def replay():
         return False
 
 
+def guess():
+    x = 0
+
+    while x not in range(1, 101):
+        try:
+            x = int(input("Enter your guess: "))
+        except ValueError:
+            print('Please enter an integer between 0 and 100')
+            continue
+
+    return x
+
+
 game_play = True
 
 
 def gameplay():
-    # @review-note: The "player guesses a number" should be a sub function of `gameplay()` to have cleaner code.
-    #               Optionally this applies to the comparative side of this function as well.
+
     while True:
 
         global game_play, my_num, guess_list
@@ -44,31 +55,22 @@ def gameplay():
 
         while game_play:
 
+            user_guess = guess()
 
+            guess_list.append(user_guess)
 
-            guess = 0
-
-            while guess not in range(1, 101):
-                try:
-                    guess = int(input("Enter your guess: "))
-                except ValueError:
-                    print('Please enter an integer between 0 and 100')
-                    continue
-
-            guess_list.append(guess)
-
-            if guess == my_num:
+            if user_guess == my_num:
                 print(f"You win! You used {len(guess_list)} tries!")
                 break
 
             elif len(guess_list) > 1:
-                if abs(my_num - guess) <= abs(my_num - guess_list[-2]):
+                if abs(my_num - user_guess) <= abs(my_num - guess_list[-2]):
                     print("Warmer!")
                 else:
                     print("Colder!")
 
             else:
-                if abs(my_num - guess) <= 10:
+                if abs(my_num - user_guess) <= 10:
                     print("Warm!")
                 else:
                     print("Cold!")
