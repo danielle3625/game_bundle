@@ -24,9 +24,6 @@ class Card:
     def __str__(self):
         return self.rank + ' of ' + self.suit
 
-# @review-note: Looks like someone is using Jupyter :D
-# In[3]:
-
 
 class Deck:
     """
@@ -51,9 +48,6 @@ class Deck:
         return single_card
 
 
-# In[4]:
-
-
 class Hand:
     """
     Create a hand class to be used for either player or dealer
@@ -76,8 +70,6 @@ class Hand:
             self.value -= 10
             self.aces -= 1
 
-
-# In[5]:
 
 
 class Chips:
@@ -109,9 +101,6 @@ class Chips:
         self.total -= self.bet
 
 
-# In[6]:
-
-
 def take_bet(chips):
     while True:
         try:
@@ -126,16 +115,9 @@ def take_bet(chips):
             else:
                 break
 
-
-# In[7]:
-
-
 def hit(deck, hand):
     hand.add_card(deck.deal())
     hand.adjust_for_ace()
-
-
-# In[8]:
 
 
 def hit_or_stand(deck, hand):
@@ -156,9 +138,6 @@ def hit_or_stand(deck, hand):
             print("Player stands. Dealer is playing.")
             playing = False
             break
-
-        # In[9]:
-
 
 def show_some(player, dealer):
     print("\nDealer's Hand:")
@@ -196,9 +175,6 @@ def dealer_wins(chips):
 
 def push():
     print("Dealer and Player tie! No chips won or lost.")
-
-
-# In[11]:
 
 
 def blackjack_play_game():
