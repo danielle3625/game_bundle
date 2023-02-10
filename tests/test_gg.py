@@ -1,10 +1,11 @@
-import gamebundle.GuessingGame
+from gamebundle import GuessingGame
 import unittest
 
+# Remember to install package using command  python -m pip install -e
 
-
-def test_new_num():
-    assert GuessingGame.new_num() in range(1,100)
+class TestBattle(unittest.TestCase):
+    def test_new_num(self):
+        assert GuessingGame.new_num() in range(1,100)
 
 def replay():
     pass
@@ -15,8 +16,6 @@ def replay():
    # else
    #     assert GuessingGame.replay() == False  
 
-def main():
-    test_new_num()
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
