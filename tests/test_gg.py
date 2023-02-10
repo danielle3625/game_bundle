@@ -8,6 +8,12 @@ def test_new_num():
 
 def replay():
     pass
+   # expected = True
+   # expect = False
+   # if [choice[0].lower() == 'y']:
+   #     assert GuessingGame.replay() == True
+   # else
+   #     assert GuessingGame.replay() == False  
 
 def main():
     test_new_num()
