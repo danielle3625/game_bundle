@@ -46,7 +46,7 @@ class Player:
     def add_cards(self, new_cards):
 
         #check for type. append can only handle one card at a time, extend can handle > 1 only.
-        if type(new_cards) == type([]):
+        if isinstance(new_cards, list):
             self.all_cards.extend(new_cards)
         else:
             self.all_cards.append(new_cards)
