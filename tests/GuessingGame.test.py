@@ -5,17 +5,15 @@ import unittest
 
 class TestBattle(unittest.TestCase):
     def test_new_num(self):
-        assert GuessingGame.new_num() in range(1,100)
+        # Note that new_num() uses random.randint which is INCLUSIVE and range is exclusive of last num
+        self.assertIn(GuessingGame.new_num(), range(1,101))
+    
+    def test_guess_appropriate_range(self):
+        self.assertIN(GuessingGame.guess(), range(1,101))
 
 def replay():
     pass
-   # expected = True
-   # expect = False
-   # if [choice[0].lower() == 'y']:
-   #     assert GuessingGame.replay() == True
-   # else
-   #     assert GuessingGame.replay() == False  
-
+    # Don't test this because should test it within that while True loop - separate test
 
 if __name__ == "__main__":
     unittest.main()
