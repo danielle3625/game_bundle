@@ -1,5 +1,6 @@
 import unittest
 from gamebundle import blackjack
+from gamebundle.blackjack import Card, Deck, Hand
 
 class TestBlackjack(unittest.TestCase):
     def test_deck_shuffled(self):
@@ -16,9 +17,11 @@ class TestBlackjack(unittest.TestCase):
         self.assertEqual(51, len(deck.all_cards))
 
     def test_player_hand(self):
-        player: player = blackjack.Hand()
-        self.assertEqual(0, player)
-        deck: deck = blackjack.Deck()
-        player = player.blackjack.hand.add_card(blackjack.deck.deal())
-        self.assertEqual(1, player)
+        player: player = Hand()
+        deck: deck = Deck()
+        player.add_card(deck.deal())
+        self.assertEqual(1, len(player.cards))
 
+
+if __name__ == "__main__":
+    unittest.main()
